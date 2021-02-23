@@ -1,0 +1,85 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+using namespace std;
+ofstream logFile;
+enum SEVERITY
+{
+    CRITICAL = 0,
+    ERROR = 1,
+    INFO = 2,
+    WARNING = 3,
+
+};
+struct LOG_ENTRY {
+    string date;
+    string time;
+    string message;
+    SEVERITY severity;
+    string toString();
+};
+string severityToString(SEVERITY severity)
+{
+    switch (severity)
+    {
+    case CRITICAL:
+        return "Critical";
+    case ERROR:
+        return "Error";
+    case INFO:
+        return "Info";
+    case WARNING:
+        return "Warning";
+    default:
+        return "Uknown";
+    }
+}
+string LOG_ENTRY::toString()
+{
+    return date + " " + time + severityToString(severity) + message;
+}
+void log(SEVERITY severity, string message)
+{
+    LOG_ENTRY logEntry{
+        "2021 - 02021",
+        "08:40:00",
+        message,
+        severity
+    };
+    logFile << logEntry.toString() << endl;
+}
+bool openLogFile(string filename)
+{
+    logFile.open(filename, ios::out | ios::app);
+    return logFile.is_open();
+}
+void closeLogFile()
+{
+    logFile.close();
+}
+bool mainMenu()
+{
+   
+}
+int main()
+{
+    if (openLogFile("mylog.txt"))
+    {
+        log(SEVERITY::INFO, "Program startup complete");
+        int a;
+        string choice;
+        cin >> choice;
+        try
+        {
+            a = stoi(choice);
+        }
+        catch (const std::exception& ex)
+        {
+            log(SEVERITY::CRITICAL, ex.what());
+        }
+        choiceStr = to_string(choice);
+        log(SEVERITY::INFO, "Terminating program.");
+        closeLogFile();
+
+    }
+}
